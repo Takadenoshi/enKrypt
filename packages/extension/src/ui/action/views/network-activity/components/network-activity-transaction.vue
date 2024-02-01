@@ -26,6 +26,12 @@
                 6
               )
             }}
+            <span v-if="Number.isFinite(activity.crossChainId)">
+              <sup
+                class="network-activity__transaction-info-crosschain-superscript"
+                >⛓️{{ activity.crossChainId }}</sup
+              >
+            </span>
           </h4>
           <p>
             <span
@@ -251,6 +257,10 @@ onMounted(() => {
             color: @error;
           }
         }
+      }
+
+      &-crosschain-superscript {
+        color: @secondaryLabel;
       }
 
       &-status {
