@@ -45,10 +45,10 @@
             />
             <span v-else-if="activity.timestamp !== 0">{{ date }}</span>
             <span
-              v-if="chainId !== undefined"
+              v-if="network.subNetworks && activity.chainId !== undefined"
               class="network-activity__transaction-info-chainid"
               >{{ activity.isIncoming ? "on" : "from" }} chain
-              {{ chainId }}</span
+              {{ activity.chainId }}</span
             >
           </p>
         </div>
@@ -126,7 +126,6 @@ import { BaseNetwork } from "@/types/base-network";
 import { fromBase } from "@enkryptcom/utils";
 import BigNumber from "bignumber.js";
 import { imageLoadError } from "@/ui/action/utils/misc";
-import { NetworkNames } from "@enkryptcom/types";
 const props = defineProps({
   activity: {
     type: Object as PropType<Activity>,
@@ -140,7 +139,6 @@ const props = defineProps({
 
 const status = ref("~");
 const date = ref("~");
-const chainId = ref("~");
 
 const transactionURL = computed(() => {
   return props.network.blockExplorerTX.replace(
@@ -155,11 +153,6 @@ const getFiatValue = computed(() => {
 });
 onMounted(() => {
   date.value = moment(props.activity.timestamp).fromNow();
-  chainId.value =
-    props.activity.network === NetworkNames.Kadena ||
-    props.activity.network === NetworkNames.KadenaTestnet
-      ? props.activity.chainId
-      : undefined;
   if (
     props.activity.status === ActivityStatus.success &&
     props.activity.isIncoming
