@@ -5,21 +5,19 @@
   </div>
   <div v-else class="network-activity__total">
     <h3>
-      {{ cryptoAmount }} <span>{{ network.currencyName }}</span>
+      {{ cryptoAmount }} <span>{{ symbol }}</span>
     </h3>
     <p>
-      <span v-if="currentChainId !== ''">{{ currentChainId }} &middot;</span>
+      <span v-if="subnetwork !== ''">Chain {{ subnetwork }} &middot;</span>
       {{ fiatAmount }}
     </p>
   </div>
 </template>
 
 <script setup lang="ts">
-import { watch, ref, PropType, onMounted } from "vue";
-import { BaseNetwork } from "@/types/base-network";
 import BalanceLoader from "@action/icons/common/balance-loader.vue";
 
-const props = defineProps({
+defineProps({
   cryptoAmount: {
     type: String,
     default: "0",
@@ -28,28 +26,14 @@ const props = defineProps({
     type: String,
     default: "0",
   },
-  network: {
-    type: Object as PropType<BaseNetwork>,
-    default: () => ({}),
+  symbol: {
+    type: String,
+    default: "",
   },
   subnetwork: {
     type: String,
     default: "",
   },
-});
-
-const currentChainId = ref("");
-
-const checkAndSetKDAChainId = () => {
-  if (props.network.currencyName === "KDA") {
-    currentChainId.value = `Chain ${props.subnetwork}`;
-  } else {
-    currentChainId.value = "";
-  }
-};
-watch(() => [props.network, props.subnetwork], checkAndSetKDAChainId);
-onMounted(() => {
-  checkAndSetKDAChainId();
 });
 </script>
 
